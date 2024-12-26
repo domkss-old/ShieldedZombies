@@ -1,5 +1,6 @@
 package net.domkss.shieldedzombies;
 
+import net.domkss.shieldedzombies.config.ModConfig;
 import net.fabricmc.api.ModInitializer;
 
 
@@ -10,13 +11,11 @@ import java.util.logging.Logger;
 public class ShieldedZombiesMod implements ModInitializer {
 
 	public static Logger LOGGER;
-
+	public static ModConfig modConfig;
 	@Override
 	public void onInitialize() {
 		initLogger();
-
-
-
+		modConfig = new ModConfig(LOGGER);
 		LOGGER.info("Successfully loaded!");
 	}
 

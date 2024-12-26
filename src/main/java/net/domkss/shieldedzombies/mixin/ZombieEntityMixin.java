@@ -1,5 +1,6 @@
 package net.domkss.shieldedzombies.mixin;
 
+import net.domkss.shieldedzombies.ShieldedZombiesMod;
 import net.domkss.shieldedzombies.goals.ShieldBlockCooldownTracker;
 import net.domkss.shieldedzombies.goals.ShieldBlockGoal;
 import net.minecraft.entity.EntityType;
@@ -39,7 +40,10 @@ public abstract class ZombieEntityMixin extends HostileEntity implements ShieldB
 
 	@Inject(method = "initEquipment", at = @At(value = "TAIL"))
 	protected void initOffHandShield(Random random, LocalDifficulty localDifficulty, CallbackInfo ci){
-		if (random.nextFloat() < (this.getWorld().getDifficulty() == Difficulty.HARD ? 0.03F : 0.015F)) {
+		float spawnChance = (float) ShieldedZombiesMod.modConfig.getNormalSpawnChance();
+		float hardSpawnChance = (float) ShieldedZombiesMod.modConfig.getHardSpawnChance();
+
+		if (random.nextFloat() < (this.getWorld().getDifficulty() == Difficulty.HARD ? hardSpawnChance : spawnChance)) {
 			this.equipStack(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
 		}
 	}
@@ -62,6 +66,7 @@ public abstract class ZombieEntityMixin extends HostileEntity implements ShieldB
 
 		}
 	}
+
 
 
 	@Unique

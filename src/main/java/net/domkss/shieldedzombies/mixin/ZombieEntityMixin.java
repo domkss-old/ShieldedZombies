@@ -14,6 +14,7 @@ import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.item.ShieldItem;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.random.Random;
@@ -38,7 +39,7 @@ public abstract class ZombieEntityMixin extends HostileEntity implements ShieldB
 
 	@Inject(method = "initEquipment", at = @At(value = "TAIL"))
 	protected void initOffHandShield(Random random, LocalDifficulty localDifficulty, CallbackInfo ci){
-		if (random.nextFloat() < (this.world.getDifficulty() == Difficulty.HARD ? 0.03F : 0.015F)) {
+		if (random.nextFloat() < (this.getWorld().getDifficulty() == Difficulty.HARD ? 0.03F : 0.015F)) {
 			this.equipStack(EquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
 		}
 	}
@@ -51,12 +52,11 @@ public abstract class ZombieEntityMixin extends HostileEntity implements ShieldB
 
 	//Block damage when using shield
 	@Inject(method = "damage", at = @At("HEAD"), cancellable = true)
-	private void handleShieldBlock(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+	private void handleShieldBlock(ServerWorld world, DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
 		if (this.isUsingItem() && this.getActiveItem().getItem() instanceof ShieldItem) {
 			//Only block attacks and projectiles
-			if((source.getAttacker() instanceof LivingEntity || source.isProjectile())
-					&& !source.isExplosive() && !source.isFire()  && !source.isMagic() && !source.bypassesArmor()) {
-				this.world.playSound(null, this.getBlockPos(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.HOSTILE, 1.0F, 1.0F);
+			if(source.getAttacker() instanceof LivingEntity && source.isDirect()) {
+				world.playSound(null, this.getBlockPos(), SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.HOSTILE, 1.0F, 1.0F);
 				cir.setReturnValue(false); // Block the damage
 			}
 
@@ -64,13 +64,12 @@ public abstract class ZombieEntityMixin extends HostileEntity implements ShieldB
 	}
 
 
-
 	@Unique
 	private static final TrackedData<Integer> SHIELD_COOLDOWN_TRACKER = DataTracker.registerData(ZombieEntity.class, TrackedDataHandlerRegistry.INTEGER);
 
 	@Inject(method = "initDataTracker", at = @At("TAIL"))
-	private void initCooldownTracker(CallbackInfo ci) {
-		this.dataTracker.startTracking(SHIELD_COOLDOWN_TRACKER, 0); // Initialize with 0 cooldown
+	private void initCooldownTracker(DataTracker.Builder builder,CallbackInfo ci) {
+		builder.add(SHIELD_COOLDOWN_TRACKER,0); // Initialize with 0 cooldown
 	}
 
 	@Inject(method = "tick", at = @At("HEAD"))

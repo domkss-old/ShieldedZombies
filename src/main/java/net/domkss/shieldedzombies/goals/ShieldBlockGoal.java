@@ -1,5 +1,6 @@
 package net.domkss.shieldedzombies.goals;
 
+import net.domkss.shieldedzombies.ShieldedZombiesMod;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.entity.mob.ZombieEntity;
 import net.minecraft.item.ShieldItem;
@@ -8,8 +9,8 @@ import net.minecraft.util.Hand;
 
 public class ShieldBlockGoal extends Goal {
     private final ZombieEntity zombie;
-    private static final int BLOCK_DURATION = 60; // 3 seconds
-    private static final int COOLDOWN_DURATION = 200; // 10 seconds
+    private static final int BLOCK_DURATION = ShieldedZombiesMod.modConfig.getBlockDuration()*20;
+    private static final int COOLDOWN_DURATION = ShieldedZombiesMod.modConfig.getShieldCooldown()*20;
     private boolean isBlocking; // Whether the zombie is currently blocking
     private int blockDuration; // Duration of blocking (ticks)
 

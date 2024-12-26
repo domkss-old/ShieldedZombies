@@ -9,7 +9,7 @@ This mod adds a small chance for zombies to spawn with a shield in their offhand
 <br/>Shielded zombies can block melee attacks and projectiles, making combat more challenging and strategic.
 <br/>Perfect for players looking to add an extra layer of difficulty to their Minecraft experience.
 <br/>Can you survive the rise of the Shielded Zombies?
-<br />Available on <a href="https://modrinth.com/mod/shieldedzombies">Modrinth</a>
+<br />Available on <a href="https://modrinth.com/mod/shieldedzombies">Modrinth</a> and <a href="https://www.curseforge.com/minecraft/mc-mods/shieldedzombies">CurseForge</a>
 
 ![Misc](https://cdn.modrinth.com/data/cached_images/d37cb4f3ef80b43f2078e92105e7ebfa477e775d.png)<br/>
 <a href="https://modrinth.com/mod/fabric-api">
